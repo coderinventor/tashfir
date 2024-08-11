@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تشفير كلام</title>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            direction: rtl;
+            text-align: center;
+            margin: 50px;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: #fff;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #ffffffcc;
+            text-shadow: 2px 2px 4px #00000088;
+        }
+
+        input[type="text"], textarea {
+            width: 80%;
+            padding: 15px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 25px;
+            background: #ffffff33;
+            color: #fff;
+            font-size: 1.2em;
+            text-align: center;
+            outline: none;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+            transition: box-shadow 0.3s ease;
+        }
+
+        input[type="text"]:focus, textarea:focus {
+            box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        button {
+            padding: 15px 30px;
+            margin: 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.2em;
+            background: linear-gradient(135deg, #2575fc, #6a11cb);
+            color: #fff;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s, box-shadow 0.3s;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        button:active {
+            transform: translateY(-1px);
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        textarea {
+            resize: none;
+            height: 150px;
+        }
+
+        @keyframes textGradient {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        input[type="text"], textarea {
+            background: none;
+            color: white;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .copy-button {
+            display: inline-block;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>شفر كلامك</h1>
+
+    <input type="text" id="inputText" placeholder="أدخل النص">
+    <br>
+    <textarea id="outputText" readonly rows="5" placeholder="النص المشفر"></textarea>
+    <br>
+    <div class="button-container">
+        <button onclick="convertText('encode')">تشفير</button>
+        <button onclick="convertText('decode')">فك تشفير</button>
+    </div>
+    <div class="copy-button">
+        <button onclick="copyText()">نسخ النص</button>
+    </div>
+
+    <script>
+        function convertText(mode) {
+            let input = document.getElementById('inputText').value;
+
+            const encodeMap = {
+                'ا': 'ب', 'ب': 'ت', 'ت': 'ث', 'ث': 'ج', 'ج': 'ح', 'ح': 'خ',
+                'خ': 'د', 'د': 'ذ', 'ذ': 'ر', 'ر': 'ز', 'ز': 'س', 'س': 'ش',
+                'ش': 'ص', 'ص': 'ض', 'ض': 'ط', 'ط': 'ظ', 'ظ': 'ع', 'ع': 'غ',
+                'غ': 'ف', 'ف': 'ق', 'ق': 'ك', 'ك': 'ل', 'ل': 'م', 'م': 'ن',
+                'ن': 'ه', 'ه': 'و', 'و': 'ي', 'ي': 'ا'
+            };
+
+            const decodeMap = Object.fromEntries(
+                Object.entries(encodeMap).map(([key, value]) => [value, key])
+            );
+
+            const conversionMap = mode === 'encode' ? encodeMap : decodeMap;
+
+            let output = '';
+            for (let char of input) {
+                output += conversionMap[char] || char;
+            }
+
+            document.getElementById('outputText').value = output;
+        }
+
+        function copyText() {
+            let outputText = document.getElementById('outputText');
+            outputText.select();
+            document.execCommand("copy");
+            alert("تم النسخ😄");
+        }
+    </script>
+
+</body>
+</html>
+
